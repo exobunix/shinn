@@ -97,7 +97,10 @@ export default function VideoSection() {
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        <div className="relative w-full max-w-[320px] min-[390px]:max-w-[360px] sm:max-w-[400px] md:max-w-[430px] aspect-[9/16] rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-2xl border-2 border-[#FFCAD4] bg-black group">
+        <div
+          onClick={togglePlay}
+          className="relative w-full max-w-[320px] min-[390px]:max-w-[360px] sm:max-w-[400px] md:max-w-[430px] aspect-[9/16] rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-2xl border-2 border-[#FFCAD4] bg-black group cursor-pointer select-none"
+        >
           {/* Ambient Video Backdrop */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -118,8 +121,18 @@ export default function VideoSection() {
             muted={isMuted}
             loop
             playsInline
+            preload="auto"
             className="w-full h-full object-contain relative z-10"
           />
+
+          {/* Center Play Button Overlay when Paused */}
+          {!isPlaying && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 backdrop-blur-xs pointer-events-none">
+              <div className="w-16 h-16 rounded-full bg-white/35 border-2 border-white/70 flex items-center justify-center shadow-2xl backdrop-blur-md animate-pulse">
+                <Play className="w-8 h-8 fill-white text-white ml-1" />
+              </div>
+            </div>
+          )}
 
           {/* Film Grain Filter Overlay */}
           <div
@@ -163,14 +176,20 @@ export default function VideoSection() {
           {/* Playback Controls Overlay */}
           <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
             <button
-              onClick={togglePlay}
+              onClick={(e) => {
+                e.stopPropagation();
+                togglePlay();
+              }}
               className="p-2.5 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-md border border-white/25 transition-all shadow-md hover:scale-105"
               aria-label={isPlaying ? "Pause video" : "Play video"}
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
             </button>
             <button
-              onClick={toggleMute}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMute();
+              }}
               className={`p-2.5 rounded-full backdrop-blur-md border border-white/25 transition-all shadow-md hover:scale-105 ${
                 !isMuted ? "bg-[#E63956] text-white" : "bg-black/50 hover:bg-black/80 text-white"
               }`}
@@ -184,13 +203,19 @@ export default function VideoSection() {
           {/* Mobile Next/Prev overlay buttons */}
           <div className="sm:hidden absolute top-1/2 -translate-y-1/2 left-2 right-2 z-30 flex justify-between pointer-events-none">
             <button
-              onClick={handlePrev}
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePrev();
+              }}
               className="pointer-events-auto p-2 rounded-full bg-black/40 text-white backdrop-blur-md hover:bg-black/70"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={handleNext}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleNext();
+              }}
               className="pointer-events-auto p-2 rounded-full bg-black/40 text-white backdrop-blur-md hover:bg-black/70"
             >
               <ChevronRight className="w-5 h-5" />

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, Pause, SkipBack, SkipForward, Music, Heart } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Music, Heart, ExternalLink } from "lucide-react";
 import { SITE_CONFIG, BollywoodSongItem } from "@/data/config";
 import { sounds } from "@/utils/sound";
 
@@ -171,12 +171,29 @@ export default function MusicPlayer({
             >
               <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-md bg-black">
                 <iframe
-                  src={`https://www.youtube.com/embed/${currentSong.youtubeId}?autoplay=1&enablejsapi=1`}
+                  key={currentSong.youtubeId}
+                  src={`https://www.youtube-nocookie.com/embed/${currentSong.youtubeId}?autoplay=1&playsinline=1&rel=0&modestbranding=1`}
                   title={`${currentSong.title} - ${currentSong.artist}`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   className="w-full h-full border-none"
                 />
+              </div>
+
+              {/* Direct Link Fallback & Track Info */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 mt-3 px-1 text-xs text-[#8A4F60]">
+                <span className="font-serif-luxury italic text-sm">
+                  Now playing: <strong className="font-semibold text-[#4A1525]">{currentSong.title}</strong> • {currentSong.movieOrAlbum} ({currentSong.artist})
+                </span>
+                <a
+                  href={`https://www.youtube.com/watch?v=${currentSong.youtubeId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF0F3] hover:bg-[#FFE5EC] border border-[#FFCAD4] text-[#E25875] font-medium transition-colors shadow-xs"
+                >
+                  <span>Watch on YouTube</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
             </motion.div>
           )}
